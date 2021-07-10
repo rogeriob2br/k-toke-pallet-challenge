@@ -252,6 +252,31 @@ impl pallet_balances::Config for Runtime {
 }
 
 parameter_types! {
+	pub const StringLimit: u32 = 50;
+	pub const AssetDeposit: Balance = 100;
+	pub const ApprovalDeposit: Balance = 100;
+	pub const MetadataDepositBase: Balance = 500;
+	pub const MetadataDepositPerByte: Balance = 500;
+}
+
+impl pallet_assets::Config for Runtime {
+	type Event = Event;
+	type Balance= Balance;
+	type AssetId = u64;
+	type ApprovalDeposit= ApprovalDeposit;
+	type Freezer = ();
+	type Extra= ();
+	type WeightInfo= ();
+	type Currency = Balances;
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type StringLimit = StringLimit;
+
+}
+
+parameter_types! {
 	pub const TransactionByteFee: Balance = 1;
 }
 
@@ -289,6 +314,7 @@ construct_runtime!(
 		Sudo: pallet_sudo::{Pallet, Call, Config<T>, Storage, Event<T>},
 		// Include the custom logic from the pallet-template in the runtime.
 		TemplateModule: pallet_template::{Pallet, Call, Storage, Event<T>},
+		Assets: pallet_assets::{Pallet, Call, Storage, Event<T>}
 	}
 );
 
